@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation
+  labels:
+    app: recommendation
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendation
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: recommendation
+        version: v1
+    spec:
+      containers:
+      - name: recommendation-container
+        image: navkkrnair/istio-recommendation:1.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - localhost:8080/actuator/health
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 1
+        ports:
+          - name: http
+            containerPort: 8080   
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - curl
+            - localhost:8080/actuator/health
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
+        securityContext:
+          privileged: false
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation
+  labels:
+    app: recommendation    
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+  selector:
+    app: recommendation
+    version: v1
