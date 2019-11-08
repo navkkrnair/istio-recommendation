@@ -20,7 +20,7 @@ spec:
       containers:
       - name: recommendation-container
         image: navkkrnair/istio-recommendation:1.0
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         livenessProbe:
           exec:
             command:
