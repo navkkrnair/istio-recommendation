@@ -12,6 +12,6 @@ ENV APPROOT="/app" \
     JAEGER_SAMPLER_PARAM=1    
 WORKDIR $APPROOT
 EXPOSE 8080 8778 9779
-COPY target/recommendation-1.0.jar $APPROOT
+COPY target/recommendation-2.0.jar $APPROOT
 ENTRYPOINT ["java"]
-CMD ["-jar", "-Xms256m", "-Xmx256m", "recommendation-1.0.jar"]
+CMD ["-jar", "-Xms256m", "-Xmx256m", "recommendation-2.0.jar"]
