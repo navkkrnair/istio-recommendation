@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: recommendation
+  name: recommendation-v2
   labels:
     app: recommendation
     version: v2
