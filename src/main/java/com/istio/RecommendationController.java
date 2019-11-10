@@ -39,7 +39,7 @@ public class RecommendationController
 		count++;
 		logger.debug(String.format("recommendation request from %s: %d", HOSTNAME, count));
 
-		// timeout();
+		timeout();
 
 		logger.debug("recommendation service ready to return");
 		if (misbehave)
