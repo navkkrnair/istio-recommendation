@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,24 +25,18 @@ public class RecommendationController
 	 */
 	private boolean misbehave = false;
 
-	private static final String HOSTNAME = parseContainerIdFromHostname(
-			System.getenv().getOrDefault("HOSTNAME", "unknown"));
-
-	static String parseContainerIdFromHostname(String hostname)
-	{
-		return hostname.replaceAll("recommendation-v\\d+-", "");
-	}
+	private static final String HOSTNAME = System.getenv().getOrDefault("HOSTNAME", "unknown");
 
 	@RequestMapping("/")
 	public ResponseEntity<String> getRecommendations()
 	{
 		logger.info(">> getRecommendations() called");
 		count++;
-		logger.debug(String.format("recommendation request from %s: %d", HOSTNAME, count));
+		logger.debug(String.format(">> recommendation request from %s: %d", HOSTNAME, count));
 
 		timeout();
 
-		logger.debug("recommendation service ready to return");
+		logger.debug(">> recommendation service ready to return");
 		if (misbehave)
 		{
 			return doMisbehavior();
@@ -57,7 +52,7 @@ public class RecommendationController
 		}
 		catch (InterruptedException e)
 		{
-			logger.info("Thread interrupted");
+			logger.info(">> Thread interrupted");
 		}
 	}
 
@@ -71,10 +66,10 @@ public class RecommendationController
 			.body(String.format("recommendation misbehavior from '%s'\n", HOSTNAME));
 	}
 
-	@RequestMapping("/misbehave")
-	public ResponseEntity<String> flagMisbehave()
+	@RequestMapping("/misbehave/{value}")
+	public ResponseEntity<String> flagMisbehave(@PathVariable boolean value)
 	{
-		this.misbehave = true;
+		this.misbehave = value ? value : false;
 		logger.debug("'misbehave' has been set to 'true'");
 		return ResponseEntity.ok("Next request to / will return a 503\n");
 	}
