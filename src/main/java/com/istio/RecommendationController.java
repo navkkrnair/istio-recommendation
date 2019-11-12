@@ -63,8 +63,9 @@ public class RecommendationController
 
 	private ResponseEntity<String> doMisbehavior()
 	{
-		count     = 0;
-		misbehave = false;
+		//count     = 0;
+		//misbehave = false;
+		misbehave = count > 50 ? true : false;
 		logger.debug(String.format("Misbehaving %d", count));
 		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
 			.body(String.format("recommendation misbehavior from '%s'\n", HOSTNAME));
