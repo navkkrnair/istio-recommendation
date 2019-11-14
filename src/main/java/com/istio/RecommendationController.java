@@ -2,11 +2,14 @@ package com.istio;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.opentracing.Tracer;
 
 @RestController
 public class RecommendationController
@@ -14,6 +17,9 @@ public class RecommendationController
 	private static final String RESPONSE_STRING_FORMAT = "recommendation v2 from '%s': %d\n";
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
+	private Tracer tracer;
 
 	/**
 	 * Counter to help us see the lifecycle
@@ -31,6 +37,7 @@ public class RecommendationController
 	public ResponseEntity<String> getRecommendations()
 	{
 		logger.info(">> getRecommendations() called");
+		logger.info(">> Baggage retrieved from Preference for key user-agent: {}", tracer.activeSpan().getBaggageItem("user-agent"));
 		count++;
 		logger.debug(String.format(">> recommendation request from %s: %d", HOSTNAME, count));
 
