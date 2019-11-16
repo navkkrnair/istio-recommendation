@@ -50,7 +50,7 @@ public class RecommendationApplication
 	{
 		return registry1 ->
 		{
-			registry.config().commonTags("application", "recommendation-service");
+			registry.config().commonTags("application", "recommendation-service-v2");
 		};
 	}
 
