@@ -6,8 +6,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Bean;
+
+import io.micrometer.core.instrument.MeterRegistry;
 
 @SpringBootApplication
 public class RecommendationApplication
@@ -39,6 +43,15 @@ public class RecommendationApplication
 			}
 		});
 		app.run(args);
+	}
+
+	@Bean
+	public MeterRegistryCustomizer<MeterRegistry> meterRegistryCustomizer(MeterRegistry registry)
+	{
+		return registry1 ->
+		{
+			registry.config().commonTags("application", "recommendation-service");
+		};
 	}
 
 }
