@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import io.opentracing.Tracer;
 
 @RestController
@@ -32,6 +33,10 @@ public class RecommendationController
 	private boolean misbehave = false;
 
 	private static final String HOSTNAME = System.getenv().getOrDefault("HOSTNAME", "unknown");
+
+	@Timed(value = "recommendation.get.request", histogram = true, extraTags =
+	{ "version", "1.0" }, percentiles =
+	{ 0.95, 0.99 })
 
 	@RequestMapping("/")
 	public ResponseEntity<String> getRecommendations()
