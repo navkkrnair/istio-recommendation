@@ -6,7 +6,7 @@ RUN apk add --no-cache bash
 RUN apk --no-cache add curl
 ENV APPROOT="/app"    
 WORKDIR $APPROOT
-EXPOSE 8080 8778 9779
+EXPOSE 8080
 COPY target/recommendation-1.0.jar $APPROOT
 ENTRYPOINT ["java"]
 CMD ["-jar", "-Xms256m", "-Xmx256m", "recommendation-1.0.jar"]

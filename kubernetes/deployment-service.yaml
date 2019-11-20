@@ -25,12 +25,6 @@ spec:
           - name: http
             containerPort: 8080   
             protocol: TCP
-          - name: jolokia
-            containerPort: 8778
-            protocol: TCP
-          - name: prometheus
-            containerPort: 9779
-            protocol: TCP
         securityContext:
           privileged: false
 ---
